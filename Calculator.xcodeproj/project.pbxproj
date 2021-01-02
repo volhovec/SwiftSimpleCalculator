@@ -15,6 +15,7 @@
 		B3253140259F640D00AF26A3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B325313E259F640D00AF26A3 /* LaunchScreen.storyboard */; };
 		B325314B259F640E00AF26A3 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B325314A259F640E00AF26A3 /* CalculatorTests.swift */; };
 		B3253156259F640E00AF26A3 /* CalculatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3253155259F640E00AF26A3 /* CalculatorUITests.swift */; };
+		B376CBE025A0F26000CD0319 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = B376CBDF25A0F26000CD0319 /* Button.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		B3253151259F640E00AF26A3 /* CalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalculatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3253155259F640E00AF26A3 /* CalculatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUITests.swift; sourceTree = "<group>"; };
 		B3253157259F640E00AF26A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B376CBDF25A0F26000CD0319 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		B3253132259F640C00AF26A3 /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				B376CBDE25A0F21600CD0319 /* Structures */,
 				B3253133259F640C00AF26A3 /* AppDelegate.swift */,
 				B3253135259F640C00AF26A3 /* SceneDelegate.swift */,
 				B3253137259F640C00AF26A3 /* ViewController.swift */,
@@ -126,6 +129,14 @@
 				B3253157259F640E00AF26A3 /* Info.plist */,
 			);
 			path = CalculatorUITests;
+			sourceTree = "<group>";
+		};
+		B376CBDE25A0F21600CD0319 /* Structures */ = {
+			isa = PBXGroup;
+			children = (
+				B376CBDF25A0F26000CD0319 /* Button.swift */,
+			);
+			path = Structures;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,6 +272,7 @@
 				B3253138259F640C00AF26A3 /* ViewController.swift in Sources */,
 				B3253134259F640C00AF26A3 /* AppDelegate.swift in Sources */,
 				B3253136259F640C00AF26A3 /* SceneDelegate.swift in Sources */,
+				B376CBE025A0F26000CD0319 /* Button.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,11 +15,18 @@ class ViewController: UIViewController {
     let colorCancelButton = UIColor.lightGray
     
     let fontSize:CGFloat = 35
+    let fontSizeResultLarge: CGFloat = 100
+    let fontSizeResultMedium: CGFloat = 85
+    let fontSizeResultSmall: CGFloat = 75
     
     @IBOutlet var holder: UIView!
     
     var firstNumber = 0
-    var resultNumber = 0
+    var resultNumber = 0 {
+        didSet {
+            updateResultLabel()
+        }
+    }
     var currentOperations: Operation?
     
     var buttonSizePadding: CGFloat = 0
@@ -28,16 +35,38 @@ class ViewController: UIViewController {
         case add, subtract, multiply, divide
     }
     
-    
-    
     private var resultLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
         label.textColor = .white
         label.textAlignment = .right
-        label.font = UIFont(name: "Helvetica", size: 80)
+        label.font = UIFont(name: "Helvetica", size: 100)
         return label
     }()
+    
+    private func updateResultLabel() {
+        var text = "\(resultNumber)"
+        var length = text.count
+        //
+        if resultNumber < 0 {
+            length += 1
+        }
+        //
+        if (length < 7) {
+            resultLabel.font = UIFont(name: "Helvetica", size: fontSizeResultLarge)
+        } else if (length == 7) {
+            resultLabel.font = UIFont(name: "Helvetica", size: fontSizeResultMedium)
+        } else {
+            resultLabel.font = UIFont(name: "Helvetica", size: fontSizeResultSmall)
+            if (resultNumber > 7) {
+                if (length > 8) {
+                    let num: Double = round(10000 * Double(resultNumber) / Double(pow(10.0, Double(length))))
+                    text = "\(num / 1000)e\(length)"
+                }
+            }
+        }
+        resultLabel.text = text
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -169,16 +198,15 @@ class ViewController: UIViewController {
     }
     
     @objc func clearResult() {
-        resultLabel.text = "0"
-        currentOperations = nil
+        resultNumber = 0
         firstNumber = 0
+        
+        currentOperations = nil
     }
     
     @objc func zeroPressed() {
-        if resultLabel.text != "0" {
-            if let text = resultLabel.text {
-                resultLabel.text = "\(text)\(0)"
-            }
+        if resultNumber != 0 {
+            resultNumber = resultNumber * 10
         }
     }
     
@@ -186,11 +214,10 @@ class ViewController: UIViewController {
     @objc func numberPressed(_ sender: UIButton) {
         let tag = sender.tag - 1
         
-        if resultLabel.text == "0" {
-            resultLabel.text = "\(tag)"
-        }
-        else if let text = resultLabel.text {
-            resultLabel.text = "\(text)\(tag)"
+        if resultNumber == 0 {
+            resultNumber = tag
+        } else {
+            resultNumber = resultNumber * 10 + tag
         }
     }
     
