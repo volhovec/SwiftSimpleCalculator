@@ -68,17 +68,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        var drawView = UIView()
 
-        //Setup Constraints for `drawView`
-//        drawView.translatesAutoresizingMaskIntoConstraints = false
-//        NSLayoutConstraint.activate([
-//            drawView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
-//            drawView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
-//            drawView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
-//            drawView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
-//        ])
     }
     
     override func viewDidLayoutSubviews() {
@@ -89,8 +79,7 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        //setupNumberPad()
+
     }
     
     private func createButton(
@@ -141,7 +130,6 @@ class ViewController: UIViewController {
     var buttonsHorizontalPadding: CGFloat = 0
     var appMainViewHeight: CGFloat = 0
     var appMainViewWidth: CGFloat = 0
-    //var buttonsTopPadding: CGFloat = 0
     
     private func calcViewParams(width: CGFloat, height: CGFloat) {
         buttonCellWidth = width / 4
@@ -254,27 +242,9 @@ class ViewController: UIViewController {
       
     }
     
-//    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-//        super.willTransition(to: newCollection, with: coordinator)
-//
-//        coordinator.animate(alongsideTransition: { (context) in
-//            guard let windowInterfaceOrientation = self.windowInterfaceOrientation else { return }
-//
-//            if windowInterfaceOrientation.isLandscape {
-//                // activate landscape changes
-//            } else {
-//                // activate portrait changes
-//            }
-//        })
-//    }
-//
-//    private var windowInterfaceOrientation: UIInterfaceOrientation? {
-//        return UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
-//    }
-    
     @objc func clearResult() {
         resultNumber = 0
-        firstNumber = 0
+        firstNumber  = 0
         
         currentOperations = nil
     }
@@ -301,53 +271,28 @@ class ViewController: UIViewController {
         
         if let text = resultLabel.text, let value = Int(text), firstNumber == 0 {
             firstNumber = value
-            resultLabel.text = "0"
+            resultNumber = 0
         }
         
         if tag == 1 {
             if let operation = currentOperations {
-                var secondNumber = 0
-                if let text = resultLabel.text, let value = Int(text) {
-                    secondNumber = value
-                }
-                
                 switch operation {
-                case .add:
-                    
-                    firstNumber = firstNumber + secondNumber
-                    secondNumber = 0
-                    resultLabel.text = "\(firstNumber)"
-                    currentOperations = nil
-                    firstNumber = 0
-                    
-                    break
-                    
-                case .subtract:
-                    firstNumber = firstNumber - secondNumber
-                    secondNumber = 0
-                    resultLabel.text = "\(firstNumber)"
-                    currentOperations = nil
-                    firstNumber = 0
-                    
-                    break
-                    
-                case .multiply:
-                    firstNumber = firstNumber * secondNumber
-                    secondNumber = 0
-                    resultLabel.text = "\(firstNumber)"
-                    currentOperations = nil
-                    firstNumber = 0
-                    
-                    break
-                    
-                case .divide:
-                    firstNumber = firstNumber / secondNumber
-                    secondNumber = 0
-                    resultLabel.text = "\(firstNumber)"
-                    currentOperations = nil
-                    firstNumber = 0
-                    break
+                    case .add:
+                        firstNumber = firstNumber + resultNumber
+                        break
+                    case .subtract:
+                        firstNumber = firstNumber - resultNumber
+                        break
+                    case .multiply:
+                        firstNumber = firstNumber * resultNumber
+                        break
+                    case .divide:
+                        firstNumber = firstNumber / resultNumber
+                        break
                 }
+                resultNumber = firstNumber
+                currentOperations = nil
+                firstNumber = 0
             }
         }
         else if tag == 2 {
