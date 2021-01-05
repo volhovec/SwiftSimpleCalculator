@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     let fontSizeResultMedium: CGFloat = 85
     let fontSizeResultSmall: CGFloat = 75
     
-    @IBOutlet var holder: UIView!
+    @IBOutlet var appMainView: UIView!
     
     var firstNumber = 0
     var resultNumber = 0 {
@@ -28,8 +28,6 @@ class ViewController: UIViewController {
         }
     }
     var currentOperations: Operation?
-    
-    var buttonSizePadding: CGFloat = 0
     
     enum Operation {
         case add, subtract, multiply, divide
@@ -71,12 +69,28 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        var drawView = UIView()
+
+        //Setup Constraints for `drawView`
+//        drawView.translatesAutoresizingMaskIntoConstraints = false
+//        NSLayoutConstraint.activate([
+//            drawView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
+//            drawView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
+//            drawView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15),
+//            drawView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -15)
+//        ])
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         setupNumberPad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //setupNumberPad()
     }
     
     private func createButton(
@@ -108,7 +122,7 @@ class ViewController: UIViewController {
                 button.addTarget(self, action: #selector(clearResult), for: .touchUpInside)
             case "operation":
                 button.addTarget(self, action: #selector(operationPressed(_:)), for: .touchUpInside)
-                button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: buttonSizePadding / 2, right: 0)
+                button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: buttonsVerticalPadding / 2, right: 0)
             default:
                 button.addTarget(self, action: #selector(numberPressed(_:)), for: .touchUpInside)
         }
@@ -116,86 +130,147 @@ class ViewController: UIViewController {
         return button
     }
     
+    var resultLabelHeight: CGFloat = 100
+    var buttonCellWidth: CGFloat = 0
+    var buttonWidth: CGFloat = 0
+    var buttonHeight: CGFloat = 0
+    var buttonCellHeight: CGFloat = 0
+    var buttonVerticalShift: CGFloat = 0
+    var buttonHorizontalShift: CGFloat = 0
+    var buttonsVerticalPadding: CGFloat = 0
+    var buttonsHorizontalPadding: CGFloat = 0
+    var appMainViewHeight: CGFloat = 0
+    var appMainViewWidth: CGFloat = 0
+    //var buttonsTopPadding: CGFloat = 0
+    
+    private func calcViewParams(width: CGFloat, height: CGFloat) {
+        buttonCellWidth = width / 4
+        if (width > height) {
+            //landscape layout
+            buttonCellHeight = (height - resultLabelHeight) / 5
+        } else {
+            //portrait layout
+            buttonCellHeight = buttonCellWidth
+        }
+        buttonsVerticalPadding = buttonCellHeight * 0.1
+        buttonsHorizontalPadding = buttonCellWidth * 0.1
+        //
+        buttonHeight = buttonCellHeight - buttonsVerticalPadding
+        buttonWidth = buttonCellWidth - buttonsHorizontalPadding
+        //
+        buttonVerticalShift = buttonsVerticalPadding / 2
+        buttonHorizontalShift = buttonsHorizontalPadding / 2
+        //buttonsTopPadding = height - buttonSizePadding
+    }
+    
     private func setupNumberPad() {
+        for subView in appMainView.subviews {
+            subView.removeFromSuperview()
+        }
         
-        let buttonSize: CGFloat = view.frame.size.width / 4
-        let buttonShift: CGFloat = buttonSizePadding / 2
-        let buttonsTopPadding: CGFloat = holder.frame.size.height - buttonSizePadding
-        
-        buttonSizePadding = buttonSize * 0.1
+        appMainView.setNeedsDisplay()
+        appMainViewHeight = appMainView.frame.size.height
+        appMainViewWidth = appMainView.frame.size.width
+        calcViewParams(
+            width: appMainView.frame.size.width,
+            height: appMainView.frame.size.height
+        )
         
         var button: UIButton
         //add button zero
         button = createButton(
-            x: buttonShift,
-            y: buttonsTopPadding - buttonSize,
-            width: buttonSize * 3 - buttonSizePadding,
-            height: buttonSize - buttonSizePadding,
+            x: buttonHorizontalShift,
+            y: appMainViewHeight - buttonCellHeight,
+            width: buttonCellWidth * 3 - buttonsHorizontalPadding,
+            height: buttonCellHeight - buttonsVerticalPadding,
             title: "0",
             tag: 1,
             backgroundColor: colorNumPad,
             fontColor: colorButtonsFont,
             action: "zero"
         )
-        holder.addSubview(button)
+        button.setNeedsDisplay()
+        appMainView.addSubview(button)
         //add numeric buttons
         for i in 1...3 {
             for j in 1...3 {
                 let num = i + 3 * (j - 1)
                 button = createButton(
-                    x: buttonSize * CGFloat(i - 1) + buttonShift,
-                    y: buttonsTopPadding - (buttonSize * CGFloat(j + 1)),
-                    width: buttonSize * 0.9,
-                    height: buttonSize * 0.9,
+                    x: buttonCellWidth * CGFloat(i - 1) + buttonHorizontalShift,
+                    y: appMainViewHeight - (buttonCellHeight * CGFloat(j + 1)),
+                    width: buttonWidth,
+                    height: buttonHeight,
                     title: "\(num)",
                     tag: num + 1,
                     backgroundColor: colorNumPad,
                     fontColor: colorButtonsFont,
                     action: "number"
                 )
-                holder.addSubview(button)
+                button.setNeedsDisplay()
+                appMainView.addSubview(button)
                 
             }
         }
         //add clear button
         button = createButton(
-            x: buttonShift,
-            y: buttonsTopPadding - (buttonSize * 5),
-            width: buttonSize * 3 - buttonSizePadding,
-            height: buttonSize - buttonSizePadding,
+            x: buttonHorizontalShift,
+            y: appMainViewHeight - (buttonCellHeight * 5),
+            width: buttonCellWidth * 3 - buttonsHorizontalPadding,
+            height: buttonHeight,
             title: "Clear",
             tag: nil,
             backgroundColor: colorCancelButton,
             fontColor: colorButtonsFont,
             action: "clear"
         )
-        holder.addSubview(button)
+        button.setNeedsDisplay()
+        appMainView.addSubview(button)
         //add operations buttons
         let operations = ["=","+", "-", "x", "÷"]
         for x in 0 ..< operations.count {
             button = createButton(
-                x: buttonSize * 3 + buttonShift,
-                y: buttonsTopPadding - (buttonSize * CGFloat(x+1)),
-                width: buttonSize - buttonSizePadding,
-                height: buttonSize - buttonSizePadding,
+                x: buttonCellWidth * 3 + buttonHorizontalShift,
+                y: appMainViewHeight - (buttonCellHeight * CGFloat(x+1)),
+                width: buttonWidth,
+                height: buttonHeight,
                 title: operations[x],
                 tag: x + 1,
                 backgroundColor: colorActions,
                 fontColor: colorButtonsFont,
                 action: "operation"
             )
-            holder.addSubview(button)
+            button.setNeedsDisplay()
+            appMainView.addSubview(button)
         }
         //set result frame
         resultLabel.frame = CGRect(
-            x: buttonSizePadding,
-            y: buttonsTopPadding - (buttonSize * 5) - 110.0,
-            width: view.frame.size.width - buttonSizePadding * 2,
+            x: buttonHorizontalShift,
+            y: appMainViewHeight - (buttonCellHeight * 5) - resultLabelHeight,
+            width: appMainViewWidth - buttonsHorizontalPadding,
             height: 100
         )
-        holder.addSubview(resultLabel)
+        resultLabel.setNeedsDisplay()
+        appMainView.addSubview(resultLabel)
       
     }
+    
+//    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+//        super.willTransition(to: newCollection, with: coordinator)
+//
+//        coordinator.animate(alongsideTransition: { (context) in
+//            guard let windowInterfaceOrientation = self.windowInterfaceOrientation else { return }
+//
+//            if windowInterfaceOrientation.isLandscape {
+//                // activate landscape changes
+//            } else {
+//                // activate portrait changes
+//            }
+//        })
+//    }
+//
+//    private var windowInterfaceOrientation: UIInterfaceOrientation? {
+//        return UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
+//    }
     
     @objc func clearResult() {
         resultNumber = 0
