@@ -9,30 +9,37 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    // MARK: interface colors
     let colorNumPad = UIColor.darkGray
     let colorButtonsFont = UIColor.white
     let colorActions = UIColor.orange
     let colorCancelButton = UIColor.lightGray
     
+    // MARK: fonts sizes
     let fontSize:CGFloat = 35
     let fontSizeResultLarge: CGFloat = 100
     let fontSizeResultMedium: CGFloat = 85
     let fontSizeResultSmall: CGFloat = 75
     
+    // MARK: outlets
     @IBOutlet var appMainView: UIView!
     
-    var firstNumber = 0
-    var resultNumber = 0 {
+    // MARK: calculator properties
+    var currentOperations: Operation?
+    var firstNumber: Double = 0
+    var secondNumber: Double = 0
+    var lastKeyTag = 0
+    var resultNumber: Double = 0 {
         didSet {
             updateResultLabel()
         }
     }
-    var currentOperations: Operation?
     
     enum Operation {
         case add, subtract, multiply, divide
     }
     
+    // MARK: interface stuff
     private var resultLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
@@ -40,11 +47,34 @@ class ViewController: UIViewController {
         label.textAlignment = .right
         label.font = UIFont(name: "Helvetica", size: 100)
         return label
-    }()
+    } ()
     
+    // MARK: view size parameters
+    var appMainViewHeight: CGFloat = 0
+    var appMainViewWidth: CGFloat = 0
+    
+    var buttonCellWidth: CGFloat = 0
+    var buttonWidth: CGFloat = 0
+    var buttonHeight: CGFloat = 0
+    var buttonCellHeight: CGFloat = 0
+    var buttonVerticalShift: CGFloat = 0
+    var buttonHorizontalShift: CGFloat = 0
+    var buttonsVerticalPadding: CGFloat = 0
+    var buttonsHorizontalPadding: CGFloat = 0
+    
+    var resultLabelHeight: CGFloat = 100
+    
+    //
     private func updateResultLabel() {
+        let resultParts = modf(resultNumber)
         var text = "\(resultNumber)"
         var length = text.count
+        if resultParts.1 == 0 {
+            let numberComponent = text.components(separatedBy :".")
+            text = "\(numberComponent[0])"
+        }
+        //
+        
         //
         if resultNumber < 0 {
             length += 1
@@ -64,22 +94,6 @@ class ViewController: UIViewController {
             }
         }
         resultLabel.text = text
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        setupNumberPad()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
     }
     
     private func createButton(
@@ -118,18 +132,6 @@ class ViewController: UIViewController {
         
         return button
     }
-    
-    var resultLabelHeight: CGFloat = 100
-    var buttonCellWidth: CGFloat = 0
-    var buttonWidth: CGFloat = 0
-    var buttonHeight: CGFloat = 0
-    var buttonCellHeight: CGFloat = 0
-    var buttonVerticalShift: CGFloat = 0
-    var buttonHorizontalShift: CGFloat = 0
-    var buttonsVerticalPadding: CGFloat = 0
-    var buttonsHorizontalPadding: CGFloat = 0
-    var appMainViewHeight: CGFloat = 0
-    var appMainViewWidth: CGFloat = 0
     
     private func calcViewParams(width: CGFloat, height: CGFloat) {
         buttonCellWidth = width / 4
@@ -206,7 +208,7 @@ class ViewController: UIViewController {
             width: buttonCellWidth * 3 - buttonsHorizontalPadding,
             height: buttonHeight,
             title: "Clear",
-            tag: nil,
+            tag: 20,
             backgroundColor: colorCancelButton,
             fontColor: colorButtonsFont,
             action: "clear"
@@ -222,7 +224,7 @@ class ViewController: UIViewController {
                 width: buttonWidth,
                 height: buttonHeight,
                 title: operations[x],
-                tag: x + 1,
+                tag: 21 + x,
                 backgroundColor: colorActions,
                 fontColor: colorButtonsFont,
                 action: "operation"
@@ -245,36 +247,52 @@ class ViewController: UIViewController {
     @objc func clearResult() {
         resultNumber = 0
         firstNumber  = 0
+        secondNumber = 0
         
         currentOperations = nil
+        
+        lastKeyTag = 20
     }
     
     @objc func zeroPressed() {
         if resultNumber != 0 {
             resultNumber = resultNumber * 10
         }
+        
+        lastKeyTag = 0
     }
-    
     
     @objc func numberPressed(_ sender: UIButton) {
         let tag = sender.tag - 1
         
         if resultNumber == 0 {
-            resultNumber = tag
+            resultNumber = Double(tag)
         } else {
-            resultNumber = resultNumber * 10 + tag
+            resultNumber = resultNumber * 10 + Double(tag)
         }
+        
+        lastKeyTag = sender.tag
     }
     
     @objc func operationPressed(_ sender: UIButton) {
         let tag = sender.tag
+        //print("tag \(tag)")
         
-        if let text = resultLabel.text, let value = Int(text), firstNumber == 0 {
-            firstNumber = value
-            resultNumber = 0
+        if let text = resultLabel.text,
+           let value = Double(text),
+           firstNumber == 0
+        {
+            firstNumber = Double(value)
+            //resultNumber = 0
         }
-        
-        if tag == 1 {
+
+        if tag == 21 {
+            if lastKeyTag == 21 {
+                resultNumber = secondNumber
+            }
+            //print("currentOperations - \(currentOperations)")
+            //print("firstNumber - \(firstNumber)")
+            //print("resultNumber - \(resultNumber)")
             if let operation = currentOperations {
                 switch operation {
                     case .add:
@@ -290,24 +308,46 @@ class ViewController: UIViewController {
                         firstNumber = firstNumber / resultNumber
                         break
                 }
+                secondNumber = resultNumber
                 resultNumber = firstNumber
-                currentOperations = nil
                 firstNumber = 0
+                
+                //currentOperations = nil
             }
-        }
-        else if tag == 2 {
-            currentOperations = .add
-        }
-        else if tag == 3 {
-            currentOperations = .subtract
-        }
-        else if tag == 4 {
-            currentOperations = .multiply
-        }
-        else if tag == 5 {
-            currentOperations = .divide
+        } else {
+            if tag == 22 {
+                currentOperations = .add
+            }
+            else if tag == 23 {
+                currentOperations = .subtract
+            }
+            else if tag == 24 {
+                currentOperations = .multiply
+            }
+            else if tag == 25 {
+                currentOperations = .divide
+            }
+            resultNumber = 0
+            secondNumber = 0
         }
         
+        lastKeyTag = tag
+    }
+    
+    // MARK: overrides
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        setupNumberPad()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
 }

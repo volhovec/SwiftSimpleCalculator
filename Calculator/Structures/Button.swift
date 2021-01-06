@@ -9,11 +9,11 @@ import UIKit
 struct Button {
     var x: CGFloat
     var y: CGFloat
-    var width: CGFloat
-    var height: CGFloat
+    var widthInPlaces: Int
+    var heightInPlaces: Int
     var title: String
     var tag: Int
-    var backgroundColor: CGColor
-    var fontColor: CGColor
+    var backgroundColor: UIColor
+    var fontColor: UIColor
     var action: String
 }
