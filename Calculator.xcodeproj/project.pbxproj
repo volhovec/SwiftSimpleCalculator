@@ -13,8 +13,6 @@
 		B325313B259F640C00AF26A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3253139259F640C00AF26A3 /* Main.storyboard */; };
 		B325313D259F640D00AF26A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B325313C259F640D00AF26A3 /* Assets.xcassets */; };
 		B3253140259F640D00AF26A3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B325313E259F640D00AF26A3 /* LaunchScreen.storyboard */; };
-		B325314B259F640E00AF26A3 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B325314A259F640E00AF26A3 /* CalculatorTests.swift */; };
-		B3253156259F640E00AF26A3 /* CalculatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3253155259F640E00AF26A3 /* CalculatorUITests.swift */; };
 		B376CBE025A0F26000CD0319 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = B376CBDF25A0F26000CD0319 /* Button.swift */; };
 		B376CBEB25A0F78600CD0319 /* ButtonsLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B376CBEA25A0F78600CD0319 /* ButtonsLayout.swift */; };
 /* End PBXBuildFile section */
@@ -46,11 +44,7 @@
 		B325313F259F640D00AF26A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B3253141259F640D00AF26A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B3253146259F640E00AF26A3 /* CalculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalculatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B325314A259F640E00AF26A3 /* CalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorTests.swift; sourceTree = "<group>"; };
-		B325314C259F640E00AF26A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B3253151259F640E00AF26A3 /* CalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalculatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3253155259F640E00AF26A3 /* CalculatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUITests.swift; sourceTree = "<group>"; };
-		B3253157259F640E00AF26A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B376CBDF25A0F26000CD0319 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		B376CBEA25A0F78600CD0319 /* ButtonsLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -84,8 +78,6 @@
 			isa = PBXGroup;
 			children = (
 				B3253132259F640C00AF26A3 /* Calculator */,
-				B3253149259F640E00AF26A3 /* CalculatorTests */,
-				B3253154259F640E00AF26A3 /* CalculatorUITests */,
 				B3253131259F640C00AF26A3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,24 +105,6 @@
 				B3253141259F640D00AF26A3 /* Info.plist */,
 			);
 			path = Calculator;
-			sourceTree = "<group>";
-		};
-		B3253149259F640E00AF26A3 /* CalculatorTests */ = {
-			isa = PBXGroup;
-			children = (
-				B325314A259F640E00AF26A3 /* CalculatorTests.swift */,
-				B325314C259F640E00AF26A3 /* Info.plist */,
-			);
-			path = CalculatorTests;
-			sourceTree = "<group>";
-		};
-		B3253154259F640E00AF26A3 /* CalculatorUITests */ = {
-			isa = PBXGroup;
-			children = (
-				B3253155259F640E00AF26A3 /* CalculatorUITests.swift */,
-				B3253157259F640E00AF26A3 /* Info.plist */,
-			);
-			path = CalculatorUITests;
 			sourceTree = "<group>";
 		};
 		B376CBDE25A0F21600CD0319 /* Structures */ = {
@@ -284,7 +258,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B325314B259F640E00AF26A3 /* CalculatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,7 +265,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3253156259F640E00AF26A3 /* CalculatorUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
